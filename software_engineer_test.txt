@@ -1,0 +1,430 @@
+Basic Rules
+===========
+1. Review the questions in this file. Reply back via email with an estimated
+   delivery date.
+2. Answer each of the questions below.
+3. Add your answer to each question to this file, in-line.
+4. Send the final file back for review.
+5. Bonus points if you add this initial file to your public git repo and share
+   that repo with us so we can see how your answers progressed.
+6. You may use external sources to help answer the questions (i.e. Google, etc),
+   but you should always cite your sources in your comments. Learning from
+   others is good. Plagiarism is bad.
+
+
+Developer Test
+==============
+
+1.  What editor will you use to edit this file, and why?
+	I have used notepad ++. easy to use, lots of build in feature to help editing and formatting.
+
+2.  Some of the questions will ask for a solution in the language of
+    your choice.  What language(s) will you choose, and why?
+	C# is the language of choice and the second one will be java. C# is my strong skill and its from
+	microsoft stack for visual studio.
+	
+3.  Explain the difference between testing and debugging.
+    testing is a part of software development use to verify and validate that the system/software
+	is build the product right and the right product is build. Testing verifies that software 
+	me the design and specification/requirement. Validation is meeting the user needs.
+	Debugging allows developers to identify and remove errors/defects/issues from the source code. 
+	Its allows to inspect the code and helps in optimization tuning.
+
+4.  Consider a user querying a search engine.  Describe, in as much
+    detail as you like, what happens between the user clicking the
+    "submit" button and the display of the results.
+	The client side / UI / browser (html/javascript) does the http post/get with the search parameters, if any
+	
+	and pass to the backend. The backend servcies layer will pass the 
+	parameters the business/data access layer.
+	
+	
+
+The two tables below describe relationships between employees,
+managers, and departments (the columns employee.mgr_id and
+department.head both refer to employee.id).  Use these definitions to
+answer questions 5-10.  If you need to use any nonstandard functions or
+syntax, be sure to name the DBMS that implements them.
+
+employee                              department
+----------------------------------    -----------------------
+ id |        name        | mgr_id           name      | head
+----+--------------------+--------    ----------------+------
+  1 | Jonathan Archer    |     11      Operations     |   11
+  2 | Christopher Pike   |     12      Marketing      |   12
+  3 | James Kirk         |     13      IT             |   13
+  4 | Jean-Luc Picard    |     14      HR             |   14
+  5 | Kathryn Janeway    |     15      Sales          |   15
+  6 | Ralph Wiggum       |     11
+  7 | Troy McClure       |     12
+  8 | Waylon Smithers    |     17
+  9 | Edna Krabappel     |     16
+ 10 | Ned Flanders       |     15
+ 11 | Buffy Summers      |
+ 12 | Xander Harris      |
+ 13 | Willow Rosenberg   |
+ 14 | Rupert Giles       |
+ 15 | Oz Selbie          |
+ 16 | Dade Murphy        |     11
+ 17 | Kate Libby         |     13
+ 18 | Paul Cook          |     17
+ 19 | Emmanuel Goldstein |     16
+ 20 | Winston Smith      |     15
+ 21 | Thomas Anderson    |     15
+ 22 | Agent Smith        |     14
+ 23 | Malcolm Reynolds   |     14
+ 24 | River Tam          |     18
+ 25 | Jason Nesmith      |     18
+
+5.  Write an SQL query to list the full name of every employee,
+    alphabetized by first name.
+	
+			select * from [dbo].[employee]
+			order by name, id asc;
+	
+	
+	
+6.  Write an SQL query to list the full name of every employee,
+    alphabetized by last name.
+	
+			select id, name as fullname,
+			substring(name, 1,  charindex(' ', name) -1) as firstname,
+			substring(name ,charindex(' ', name) + 1 ,len(name)) lastname,
+			mgr_id 
+			from [dbo].[employee]
+			order by lastname, firstname asc;
+	
+	
+7.  Write an SQL query to list the full name of every employee along
+    with the full name of his/her manager.
+	
+			select e.id, e.name as employeeName, e.mgr_id, e1.name as managerName
+			from [dbo].[employee] e
+			left join [dbo].[employee] e1 on e.mgr_id = e1.id
+	
+	
+8.  Write an SQL query to list the full name of every employee in the
+    Sales department.
+	
+			select e.id, e.name as fullname, e.mgr_id 
+			from [dbo].[employee] e
+			join [dbo].[department] d on e.mgr_id = d.head
+			where d.name = 'Sales';
+				
+	
+	
+9.  Write an SQL query to list the full name of every employee along
+    with name of his/her department.
+
+			select e.id, e.name as fullname, e.mgr_id, d.name as departName
+			from [dbo].[employee] e
+			left join [dbo].[department] d on e.mgr_id = d.head
+			order by d.name;
+	
+	
+10. Is there a better design for a database that supports the queries
+    described in questions 5-9?  If so, describe it.  If not, why not?
+	
+		The schema of employee table can improved by separating name column into firstName and LastName columns.
+		
+	
+11. Write a function in the language of your choice that implements
+    quicksort on an array of integers.
+	
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+
+	namespace ConsoleApplication1
+	{
+		class Program
+		{
+			static void Main(string[] args)
+			{
+				// Create an unsorted array of int elements
+				int[] unsorted = { 1, 5, 8, 1, 3, 1, 2, 7 };
+
+				Debug.WriteLine("List in unsorted order: ");
+
+				foreach (var number in unsorted)
+					Debug.Write(number + ",");
+
+				Debug.WriteLine(" ");
+				//creating a list to store the numbers
+				var numberList = new List<int>();
+
+				//store unsorted numbers into the list of numbers
+				numberList.AddRange(unsorted);
+
+				//sort numbers, it uses quick sort
+				//If the partition size is fewer than 16 elements, it uses an insertion sort algorithm.
+				//If the number of partitions exceeds 2 * LogN, where N is the range of the input array, it uses a Heapsort algorithm.
+				//Otherwise, it uses a Quicksort algorithm.
+				//Reference:
+				//List<T>.Sort Method () Available at: https://msdn.microsoft.com/en-us/library/b0zbh7b6(v=vs.110).aspx.
+				numberList.Sort();
+
+				Debug.WriteLine("List in sorted order: ");
+				foreach (var number in numberList)
+					Debug.Write(number + ",");
+
+			}
+		}
+	}
+
+
+	
+12. Write a function in the language of your choice that performs
+    binary search on a sorted array of integers.
+	
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+
+	namespace ConsoleApplication1
+	{
+		class Program
+		{
+			static void Main(string[] args)
+			{
+				// Create an sorted array of int elements
+				int[] sortedArray = { 1, 1, 1, 2, 3, 5, 7, 8 };
+				int searchNumber = 7;
+
+				if (performBinarySearch(sortedArray, searchNumber))
+				{
+					Debug.WriteLine("Item found: " + searchNumber);
+				}
+				else
+				{
+					Debug.WriteLine("Item not found: " + searchNumber);
+				}
+
+
+			}
+
+			private static Boolean performBinarySearch(int[] sortedArray, int searchNumber)
+			{
+				var numberList = new List<int>();
+
+				//store unsorted numbers into the list of numbers
+				numberList.AddRange(sortedArray);
+
+				//Reference:
+				//List<T>.BinarySearch Method (T) Available at: https://msdn.microsoft.com/en-us/library/w4e7fxsh(v=vs.110).aspx.
+
+				//Searching for number 8
+				int index = numberList.BinarySearch(searchNumber);
+
+				if (index < 0)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+
+			}
+		}
+	}
+
+	
+	
+13. Write a function in the language of your choice performs the query
+    you wrote for question 7, and outputs the results as an HTML table.
+	
+	//Reference:
+    //HTML5 - Web SQL Database Available at: http://www.tutorialspoint.com/html5/html5_web_sql.htm
+
+	
+	<!DOCTYPE HTML>
+	<html>
+
+		<head>
+
+			<script type="text/javascript">
+
+				var db = openDatabase('servername/TestDatatbase', '9.0', 'Test DB', 2 * 1024 * 1024);
+				var msg;
+
+				var sqlquery = "'select id, name as fullname, substring(name, 1,  charindex(' ', name) -1) as firstname," +
+								  "substring(name ,charindex(' ', name) + 1 ,len(name)) lastname, mgr_id " +
+								  "from [dbo].[employee] order by lastname, firstname asc'";
+
+				 db.transaction(function (tx) {
+					 tx.executeSql(sqlquery, [], function (tx, results)
+					 {
+					   var len = results.rows.length, i;
+					   msg = "<p>Found rows: " + len + "</p>";
+					   document.querySelector('#status').innerHTML +=  msg;
+
+					   for (i = 0; i < len; i++){
+						  msg = "<p><b>" + results.rows.item(i).log + "</b></p>";
+						  document.querySelector('#status').innerHTML +=  msg;
+					   }
+					}, null);
+				 });
+
+			</script>
+
+		</head>
+
+	<body>
+		<div id="status" name="status">Status Message</div>
+	</body>
+
+	</html>
+	
+	
+14. Write a program in the language of your choice that takes a filename
+    and a number N as arguments and retrieves and outputs the Nth line
+    from the file.
+	
+	//Reference:
+    //Code: Reading a Text File One Line at a Time (Visual C#) Available at: https://msdn.microsoft.com/en-us/library/aa287535(v=vs.71).aspx
+
+	
+	using System;
+	using System.Diagnostics;
+
+	namespace ConsoleApplication1
+	{
+		class Program
+		{
+			static void Main(string[] args)
+			{
+				int lineNumber = -1;
+				string fileName = "C:\\AAWorks\\Zar\\DataFile.txt";
+
+
+				String lineText = readFromFile(lineNumber, fileName);
+
+				Debug.WriteLine(lineText);
+			}
+
+			private static String readFromFile(int lineNumber, string fileName)
+			{
+				int counter = 0;
+				string line;
+				string rtnLine = null;
+				
+				try
+				{
+					// Read the file and display it line by line.
+					System.IO.StreamReader file =
+					   new System.IO.StreamReader(fileName);
+
+					while ((line = file.ReadLine()) != null)
+					{
+						if (lineNumber == counter)
+						{
+							rtnLine = line;
+							break;
+						}
+
+						counter++;
+					}
+
+					file.Close();
+				}
+				catch (Exception ex)
+				{
+					throw ex;
+				}
+
+				return rtnLine;
+			}
+		}
+}
+
+	
+	
+15. Write the function from question 12 in a different language.
+
+	//Reference:
+    //Code: Binary Search Java Code Available at: http://www.cs.toronto.edu/~reid/search/bincode.html
+
+
+	int[] data;
+	int size;
+
+    public boolean binarySearch(int key) 
+    {
+      int low = 0;
+      int high = size - 1;
+        
+       while(high >= low) {
+            int middle = (low + high) / 2;
+            if(data[middle] == key) {
+                return true;
+            }
+            if(data[middle] < key) {
+                low = middle + 1;
+            }
+            if(data[middle] > key) {
+                high = middle - 1;
+            }
+       }
+       return false;
+  }
+
+
+
+16. Write the program from question 14 in a different language (it can
+    be the same language you used for #15, but it doesn't have to be).
+	
+	
+	package testInterview;
+
+	import java.io.BufferedReader;
+	import java.io.File;
+	import java.io.FileInputStream;
+	import java.io.IOException;
+	import java.io.InputStreamReader;
+
+	public class main {
+
+		public static void main(String[] args) {
+			// TODO Auto-generated method stub
+			File fin = new File("C:\\AAWorks\\Zar\\DataFile.txt");
+			int lineNumber = 4;
+			
+			try {
+				String lineValue = readFile(fin, lineNumber);
+				
+				System.out.println(lineValue);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	
+	
+	private static String readFile(File fin, int lineNumber) throws IOException {
+		FileInputStream fis = new FileInputStream(fin);
+	 
+		String returnLine = null;
+		int lineCounter = 0;
+		
+		//Construct BufferedReader from InputStreamReader
+		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+	 
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			if  (lineCounter == lineNumber)
+			{
+				returnLine = line;
+				System.out.println(line);
+				break;
+			}
+			lineCounter++;
+		}
+	 
+		br.close();
+		
+		return returnLine;
+	}
+}
+
